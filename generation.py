@@ -62,6 +62,10 @@ class Generation:
 
         blocks = [0, 0]
         for j in range(count_room):
+            past_horizontal_on = next_horizontal_on[0]
+            past_random_x = next_random_x[0]
+            past_random_y = next_random_y[0]
+            
             next_horizontal_on[0], next_horizontal_on[1] = next_horizontal_on[1], random.choice([0, 1])
             horizontal_on = next_horizontal_on[0]
 
@@ -70,6 +74,13 @@ class Generation:
 
             left_or_right = next_random_x[0]
             up_or_down = next_random_y[0]
+            
+            if past_horizontal_on != horizontal_on != next_horizontal_on[1]:
+                if past_random_x != next_random_x[1] or past_random_y != next_random_y[1]:
+                    if horizontal_on:
+                        up_or_down = -up_or_down
+                    else:
+                        left_or_right = -left_or_right
 
             for i in self.sum_list_collide_objects:
                 if i.number_room == j - 1:
