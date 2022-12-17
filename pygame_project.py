@@ -21,6 +21,7 @@ class GameWidget(QWidget):
         self.screen = pygame.display.set_mode((self.width(), self.height()), pygame.HIDDEN)
 
         self.player = Player((self.width() // 2, self.height() // 2), player_group)
+        self.player.rect.x, self.player.rect.y = self.player.rect.x - 100, self.player.rect.y - 100
 
         self.generation = Generation()
         self.size_block = 30
