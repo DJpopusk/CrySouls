@@ -86,7 +86,7 @@ class Generation:
             if horizontal_on:
                 transform[0] = blocks[0] + size_object if blocks[0] > 0 else blocks[0]
             else:
-                transform[1] = blocks[1] + size_object if blocks[1] < 0 else blocks[1]
+                transform[1] = blocks[1] + size_object if blocks[1] > 0 else blocks[1]
 
             direction = [0, 0, 0, 0]
             if (next_horizontal_on[1] and next_random_x[1] == -1 and j + 1 != count_room) \
