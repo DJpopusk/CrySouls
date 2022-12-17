@@ -72,8 +72,8 @@ class Generation:
             next_random_x[0], next_random_x[1] = next_random_x[1], random.choice([1, -1])
             next_random_y[0], next_random_y[1] = next_random_y[1], random.choice([1, -1])
 
-            left_or_right = next_random_x[0]
-            up_or_down = next_random_y[0]
+            left_or_right = next_random_x[0] if j != 0 else 0
+            up_or_down = next_random_y[0] if j != 0 else 0
             
             if past_horizontal_on != horizontal_on != next_horizontal_on[1]:
                 if past_random_x != next_random_x[1] or past_random_y != next_random_y[1]:
