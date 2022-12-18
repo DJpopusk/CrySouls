@@ -43,7 +43,7 @@ class Generation:
         self.classes = [Base, Wall, Drill, Chest, Box, Door, Bed, Enemy]
         self.groups = [base_group, wall_group, drill_group, chest_group, box_group, door_group, bed_group, enemy_group]
 
-    def create_level(self, size_object, width=10, height=10):
+    def create_level(self, size_object, width=10, height=10, count_room=(6, 10)):
         def block_select(block, a, over):
             if over:
                 if block < a:
@@ -54,7 +54,7 @@ class Generation:
             return block
 
         generations = [self.generation_enemy_room for _ in range(3)] + [self.generation_chest_room]
-        count_room = random.randint(6, 10)
+        count_room = random.randint(count_room[0], count_room[1])
         transform = [0, 0]
         next_horizontal_on = [random.choice([0, 1]), random.choice([0, 1])]
         next_random_x = [random.choice([1, -1]), random.choice([1, -1])]
