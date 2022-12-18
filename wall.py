@@ -19,11 +19,11 @@ class Wall(pygame.sprite.Sprite):
     def update(self, collider_player: Player, speed: list, key: list):
         self._update(collider_player, speed, key)
 
-    def resize(self, width, height):
+    def resize(self, width, height, size_block):
         self.image = pygame.image.load(f"textures\\{self.image_text}").convert_alpha()
         self.rect = self.image.get_rect(center=self.rect.center)
 
-        k = width / height
+        k = width / height * size_block / 30
         self.image = pygame.transform.scale(self.image, (k * self.rect.width, k * self.rect.height))
         self.rect = self.image.get_rect(center=self.rect.center)
 
