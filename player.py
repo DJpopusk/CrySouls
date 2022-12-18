@@ -21,10 +21,10 @@ class Player(pygame.sprite.Sprite):
         self.direction = [False, True, False]  # Left, Right, Jump
         self.path = "image\\right\\main.png"
 
-    def update(self, width, height, walls: list, collide: list, key):
+    def update(self, width, height, walls: list, collide: list, key, size_block):
         self.update_region(width, height, key, collide)
         self._animation()
-        self.resize(width, height)
+        self.resize(width, height, size_block)
         self._update_pos(width, height, walls)
 
     def update_region(self, width, height, key, collide):
@@ -63,11 +63,11 @@ class Player(pygame.sprite.Sprite):
                 i.rect.x += width // 2 - self.rect.width // 2 - self.rect.x
             self.rect.x = width // 2 - self.rect.width // 2
 
-    def resize(self, width, height):
+    def resize(self, width, height, size_block):
         self.image = pygame.image.load(self.path).convert_alpha()
         self.rect = self.image.get_rect(center=self.rect.center)
 
-        k = (width / height) * 0.5
+        k = (width / height) * 0.5 * size_block / 30
         self.image = pygame.transform.scale(self.image, (k * self.rect.width, k * self.rect.height))
         self.rect = self.image.get_rect(center=self.rect.center)
 
