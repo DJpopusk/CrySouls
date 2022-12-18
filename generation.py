@@ -77,9 +77,9 @@ class Generation:
             
             if past_horizontal_on != horizontal_on != next_horizontal_on[1]:
                 if past_random_x != next_random_x[1] and horizontal_on:
-                    left_or_right = -left_or_right
-                if past_random_y != next_random_y[1] and not horizontal_on:
                     up_or_down = -up_or_down
+                if past_random_y != next_random_y[1] and not horizontal_on:
+                    left_or_right = -left_or_right
 
             for i in self.sum_list_collide_objects:
                 if i.number_room == j - 1:
