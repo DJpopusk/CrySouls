@@ -130,7 +130,7 @@ class GameWidget(QWidget):
         self.generation.update_level(size, k)
 
         for i in self.sum_list_collide_objects:
-            i.resize(self.width(), self.height())
+            i.resize(self.width(), self.height(), self.size_block)
 
         rect = self.sum_list_collide_objects[0]
         self.player.rect.centerx -= rect.old_center[0] - rect.rect.centerx
