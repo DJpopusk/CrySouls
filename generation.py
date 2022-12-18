@@ -133,9 +133,15 @@ class Generation:
                 c = len(b) - c
                 if j:
                     index = self.images.index(j)
-                    my_object = self.classes[index]([a * size_object + transfer[0], c * size_object + transfer[1]],
-                                                    self.groups[index], self.images[index], [a, c],
-                                                    [transfer[0], transfer[1]], number_room)
+                    if j == "bed.PNG":
+                        my_object = self.classes[index]([a * size_object + transfer[0], c * size_object + transfer[1] +
+                                                         size_object / 2],
+                                                        self.groups[index], self.images[index], [a, c],
+                                                        [transfer[0], transfer[1] + size_object / 2], number_room)
+                    else:
+                        my_object = self.classes[index]([a * size_object + transfer[0], c * size_object + transfer[1]],
+                                                        self.groups[index], self.images[index], [a, c],
+                                                        [transfer[0], transfer[1]], number_room)
 
                     self.sum_list_collide_objects.append(my_object)
                     self.list_collide_objects[index].append(my_object)
@@ -172,9 +178,13 @@ class Generation:
         direction = [0, 0, 0, 0] if direction is None else direction
 
         my_room = self.create_room(len_room_h, len_room_w)
-        my_room[2][2] = self.box_image
+        my_room[1][1] = self.box_image
         my_room[len_room_h-3][1] = self.bed_image
         my_room = self.exit_room(my_room, direction)
+        if direction[2] == 1:
+            my_room[len_room_h-3][0] = self.wall_image
+            my_room[len_room_h-4][0] = self.wall_image
+
         return my_room
 
     def generation_enemy_room(self, len_room_h, len_room_w, direction=None, count_enemy=None):
