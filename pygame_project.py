@@ -70,7 +70,7 @@ class GameWidget(QWidget):
         # взаимодействия игрока
 
         self.group_draw_update(player_group, (self.width(), self.height(), self.sum_list_collide_objects,
-                                              self.list_open_collide_objects, self.Open))
+                                              self.list_open_collide_objects, self.Open), self.size_block)
         self.Open = 0
 
         self.clock.tick(self.FPS)
@@ -136,7 +136,7 @@ class GameWidget(QWidget):
         self.player.rect.centerx -= rect.old_center[0] - rect.rect.centerx
         self.player.rect.centery -= rect.old_center[1] - rect.rect.centery
 
-        self.player.resize(self.width(), self.height())
+        self.player.resize(self.width(), self.height(), self.size_block)
 
     def paintEvent(self, a):
         if self.paint:
