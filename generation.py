@@ -171,9 +171,9 @@ class Generation:
     def generation_house_room(self, len_room_h, len_room_w, direction=None):
         direction = [0, 0, 0, 0] if direction is None else direction
 
-        my_room = self.create_room(len_room_w, len_room_h)
+        my_room = self.create_room(len_room_h, len_room_w)
         my_room[2][2] = self.box_image
-        my_room[4][3] = self.bed_image
+        my_room[len_room_h-3][1] = self.bed_image
         my_room = self.exit_room(my_room, direction)
         return my_room
 
