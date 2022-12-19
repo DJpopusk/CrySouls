@@ -47,6 +47,7 @@ class GameWidget(QWidget):
         self.list_open_collide_objects = [j for i in self.generation.list_collide_objects[3:7] for j in i]
 
         self.groups = self.generation.groups
+        self.clock = pygame.time.Clock()
 
     def pygame_loop(self):
         """
@@ -75,6 +76,7 @@ class GameWidget(QWidget):
         self.Open = 0
 
         self.update(0, 0, self.width(), self.height())
+        self.clock.tick(60)
 
     def group_draw_update(self, group, params):
         group.draw(self.screen)
