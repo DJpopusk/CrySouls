@@ -88,7 +88,7 @@ class Player(pygame.sprite.Sprite):
 
         if not self.direction[2]:
             if self.Go_x:
-                self.Frame += 0.2
+                self.Frame += 0.1
                 if self.Frame > 7:
                     self.Frame -= 7
                 Personnel = ["0.png", "1.png", "2.png", "3.png", "4.png", "5.png", "6.png", "7.png"]
