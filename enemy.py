@@ -19,7 +19,19 @@ class Enemy(Wall):
 
     def update(self, collider_player: Player, speed: list, key: list, walls):
         self._update(collider_player, speed, key)
+        self._go(collider_player)
         self._update_pos(walls)
+
+    def _go(self, collider_player):
+        # if collider_player.rect.centerx - 100 > self.rect.centerx:
+        #     self.rect.centerx += 1
+        # elif collider_player.rect.centerx + 100 < self.rect.centerx:
+        #     self.rect.centerx -= 1
+        # if collider_player.rect.centery - 100 > self.rect.centery:
+        #     self.rect.centery += 1
+        # elif collider_player.rect.centery + 100 < self.rect.centery:
+        #     self.rect.centery -= 1
+        ...
 
     def _update_pos(self, walls):
         # for j in walls:
