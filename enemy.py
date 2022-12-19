@@ -42,9 +42,21 @@ class Enemy(Wall):
                 self.rect.centery -= 1
 
     def _update_pos(self, walls):
-        # for j in walls:
-        #     for i in j:
-        #         if self.rect.colliderect(i):
-        #             код выше определяет что враг столкнулся со стеной и проходом
-        #             объект i это стена или предемет с которым столкнулся враг
-        ...
+        for j in walls:
+            for i in j:
+                if self.rect.colliderect(i):
+                    x_1, x_2 = self.rect.centerx - i.rect.right, i.rect.left - self.rect.centerx
+                    y_1, y_2 = self.rect.centery - i.rect.bottom, i.rect.top - self.rect.centery
+                    y = y_1 - y_2 if y_1 < y_2 else y_2 - y_1
+                    x = x_1 - x_2 if x_1 < x_2 else x_2 - x_1
+
+                    if x < y:
+                        if x_1 < x_2:
+                            self.rect.right = i.rect.left
+                        else:
+                            self.rect.left = i.rect.right
+                    else:
+                        if y_1 < y_2:
+                            self.rect.bottom = i.rect.top
+                        else:
+                            self.rect.top = i.rect.bottom
