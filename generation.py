@@ -65,7 +65,7 @@ class Generation:
             past_horizontal_on = next_horizontal_on[0]
             past_random_x = next_random_x[0]
             past_random_y = next_random_y[0]
-            
+
             next_horizontal_on[0], next_horizontal_on[1] = next_horizontal_on[1], random.choice([0, 1])
             horizontal_on = next_horizontal_on[0]
 
@@ -74,7 +74,7 @@ class Generation:
 
             left_or_right = next_random_x[0]
             up_or_down = next_random_y[0]
-            
+
             if past_horizontal_on != horizontal_on != next_horizontal_on[1]:
                 if past_random_x != next_random_x[1] and not horizontal_on:
                     left_or_right = -left_or_right
@@ -96,7 +96,7 @@ class Generation:
             if horizontal_on:
                 transform[0] = blocks[0] + size_object if blocks[0] > 0 else blocks[0]
             else:
-                transform[1] = blocks[1] - size_object if blocks[1] > 0 else blocks[1]
+                transform[1] = blocks[1] if blocks[1] > 0 else blocks[1] - size_object
 
             direction = [0, 0, 0, 0]
             if (next_horizontal_on[1] and next_random_x[1] == -1 and j + 1 != count_room) \
@@ -114,7 +114,8 @@ class Generation:
 
             gnr = generations[random.randint(0, len(generations) - 1)] if j > 0 else self.generation_house_room
             if gnr == self.generation_enemy_room:
-                self.draw_room(gnr(width, height, direction, [count_enemy[0], count_enemy[1]]), size_object, transform, j)
+                self.draw_room(gnr(width, height, direction, [count_enemy[0], count_enemy[1]]), size_object, transform,
+                               j)
             else:
                 self.draw_room(gnr(width, height, direction), size_object, transform, j)
 
@@ -244,7 +245,7 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(size)
     g = Generation()
     g.create_level(30)
-    [i.resize(we, he) for i in g.list_collide_objects[7]]
+    [i.resize(we, he, 30) for i in g.list_collide_objects[7]]
 
     while True:
         for event in pygame.event.get():
