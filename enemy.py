@@ -40,7 +40,6 @@ class Enemy(Wall):
                 self.rect.centery += 1
             elif collider_player.rect.centery + 100 < self.rect.centery:
                 self.rect.centery -= 1
-        ...
 
     def _update_pos(self, walls):
         # for j in walls:
