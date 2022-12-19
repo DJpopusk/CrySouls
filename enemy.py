@@ -11,12 +11,7 @@ class Enemy(Wall):
         self.region = pygame.Rect(pos[0] - 160, pos[1] - 160, 320, 320)
 
     def update_region(self):
-        """
-        функция которая определяет есть ли поблизости объекты с которыми можно взаимодействовать
-
-        :param width: ширена экрана
-        :param height: высота экрана
-        """
+        """функция которая обновляет область вокруг врага"""
         if self.region.left != self.rect.centerx - 160 or self.region.top != self.rect.centery - 160:
             self.region = pygame.Rect(self.rect.centerx - 160, self.rect.centery - 160, 320, 320)
 
