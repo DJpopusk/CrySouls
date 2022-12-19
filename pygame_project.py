@@ -21,18 +21,18 @@ class GameWidget(QWidget):
         self.screen = pygame.display.set_mode((self.width(), self.height()), pygame.HIDDEN)
 
         self.player = Player((self.width() // 2, self.height() // 2), player_group)
-        self.player.rect.x, self.player.rect.y = self.player.rect.x - 100, self.player.rect.y - 100
 
         self.generation = Generation()
         self.size_block = 30
         self.generation.create_level(self.size_block)
 
+        self.player.rect.x = self.player.rect.x - self.size_block / 30
+        self.player.rect.y = self.player.rect.y - self.size_block / 30
+
         self.Exit = False
         self.paint = True
-        self.FPS = 100
         self.MY_EVENT = pygame.USEREVENT + 1
         pygame.time.set_timer(self.MY_EVENT, 150)  # здесь можно менять скорость анимации
-        self.clock = pygame.time.Clock()
 
         self.game_timer = QTimer()
         self.game_timer.timeout.connect(self.pygame_loop)
@@ -63,17 +63,17 @@ class GameWidget(QWidget):
         for i in self.groups[:7]:
             self.group_draw_update(i, (self.player, [self.player.player_speed_x, self.player.player_speed_y],
                                        self.Go_always))
-        self.group_draw_update(self.groups[7], (self.player, [self.player.player_speed_x, self.player.player_speed_y],
-                                                self.Go_always, self.generation.list_collide_objects[:7]))
+        self.group_draw_update(self.groups[7], (self.player, [self.player.player_speed_x,
+                               self.player.player_speed_y], self.Go_always, self.generation.list_collide_objects[:7]))
 
+        # [pygame.draw.rect(self.screen, (255, 100, 0), i.region) for i in self.generation.list_collide_objects[7]]
         # pygame.draw.rect(self.screen, (255, 0, 0), self.player.region)  # эта строка отображает дальность
         # взаимодействия игрока
 
         self.group_draw_update(player_group, (self.width(), self.height(), self.sum_list_collide_objects,
-                                              self.list_open_collide_objects, self.Open), self.size_block)
+                                              self.list_open_collide_objects, self.Open, self.size_block))
         self.Open = 0
 
-        self.clock.tick(self.FPS)
         self.update(0, 0, self.width(), self.height())
 
     def group_draw_update(self, group, params):
