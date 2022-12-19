@@ -29,7 +29,7 @@ class Player(pygame.sprite.Sprite):
 
     def update_region(self, width, height, key, collide):
         """
-        функция которая определяет есть ли поблизости объекты с которыми можно взаимодействовать
+        функция которая обновляет область вокруг перса
 
         :param width: ширена экрана
         :param height: высота экрана
