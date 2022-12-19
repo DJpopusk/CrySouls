@@ -23,7 +23,7 @@ class GameWidget(QWidget):
         self.player = Player((self.width() // 2, self.height() // 2), player_group)
 
         self.generation = Generation()
-        self.size_block = 30
+        self.size_block = 40
         self.generation.create_level(self.size_block)
 
         self.player.rect.x = self.player.rect.x - self.size_block / 30
