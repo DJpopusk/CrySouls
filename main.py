@@ -24,7 +24,7 @@ class Result(MenuWidget, GameWidget):
 
             if not self.game_timer_on:
                 self.game_timer_on = True
-                self.game_timer.start(5)
+                self.game_timer.start(7)
 
             if not self.progressBar.value():
                 self.score = 0
