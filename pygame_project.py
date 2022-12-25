@@ -72,7 +72,7 @@ class GameWidget(QWidget):
         # взаимодействия игрока
 
         self.group_draw_update(player_group, (self.width(), self.height(), self.sum_list_collide_objects,
-                                              self.list_open_collide_objects, self.Open, self.size_block))
+                                              self.list_open_collide_objects, self.Open, self.blows, self.size_block))
         self.Open = 0
 
         self.update(0, 0, self.width(), self.height())
@@ -107,9 +107,12 @@ class GameWidget(QWidget):
             case "в": self.Go_always[3] += 1 if on else -1
             case "e": self.Open = 1 if on and not a0.isAutoRepeat() else 0
             case "у": self.Open = 1 if on and not a0.isAutoRepeat() else 0
+            case "k": self.blows += 1 if on else -1
+            case "л": self.blows += 1 if on else -1
 
         if self.Go_always[2] == self.Go_always[3]:
             self.player.Go_x = False
+            self.player.direction[2], self.player.direction[3] = self.Go_always[0], self.Go_always[1]
         else:
             self.player.Go_x = True
             self.player.direction[0], self.player.direction[1] = (False, True) if self.Go_always[3] else (True, False)
