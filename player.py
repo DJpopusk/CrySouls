@@ -18,28 +18,29 @@ class Player(pygame.sprite.Sprite):
 
         self.Go_x = False
         self.Frame = 0
-        self.direction = [False, True, False]  # Left, Right, Jump
+        self.direction = [False, True, False, False]  # Left, Right, Up, Down
         self.path = "image\\right\\main.png"
 
-    def update(self, width, height, walls: list, collide: list, key, size_block):
-        self.update_region(width, height, key, collide)
+    def update(self, width, height, walls: list, collide: list, key_open, key_blows, size_block):
+        self.update_region(width, height, key_open, key_blows, collide)
         self._animation()
         self.resize(width, height, size_block)
         self._update_pos(width, height, walls)
 
-    def update_region(self, width, height, key, collide):
+    def update_region(self, width, height, key_open, key_blows, collide):
         """
-        функция которая обновляет область вокруг перса
+        функция которая обновляет область вокруг персонажа
 
         :param width: ширена экрана
         :param height: высота экрана
-        :param key: нажата ли нужная клавиша
+        :param key_open: нажата ли клавиша открывающая что-то
+        :param key_blows: нажата ли клавиша атаки
         :param collide: объекты с которыми можно взаимодействовать
         """
         if self.region.left != width // 2 - 80 or self.region.top != height // 2 - 80:
             self.region = pygame.Rect(width // 2 - 80, height // 2 - 80, 160, 160)
 
-        if key:
+        if key_open:
             for i in collide:
                 if i.rect.colliderect(self.region):
                     i.open(width, height)
