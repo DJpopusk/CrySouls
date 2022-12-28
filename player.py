@@ -94,7 +94,7 @@ class Player(pygame.sprite.Sprite):
         elif self.direction[3]:
             file = 'down'
 
-        if not key_udar:
+        if not key_udar or self.Go:
             if self.Go:
                 self.Frame += 0.2
                 if self.Frame > 7:
