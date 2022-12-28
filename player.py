@@ -106,7 +106,7 @@ class Player(pygame.sprite.Sprite):
                 self.path = f"image/{file}/main.png"
                 self.image = pygame.image.load(self.path).convert_alpha()
         else:
-            if self.Go:
+            if not self.Go:
                 self.Frame += 0.3
                 if self.Frame >= 3:
                     self.Frame = 0
@@ -114,7 +114,7 @@ class Player(pygame.sprite.Sprite):
                 self.path = f"image/{file}/{Personnel[int(self.Frame)]}"
                 self.image = pygame.image.load(self.path).convert_alpha()
             else:
-                f"image/{file}/main.png"
+                self.path = f"image/{file}/main.png"
                 self.image = pygame.image.load(self.path).convert_alpha()
 
     def __update_animation_up(self, up):
