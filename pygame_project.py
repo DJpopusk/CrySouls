@@ -24,7 +24,7 @@ class GameWidget(QWidget):
 
         self.generation = Generation()
         self.size_block = 40
-        self.generation.create_level(self.size_block)
+        self.generation.create_level(self.size_block, 10, 10, [6, 10], [6, 15])
 
         self.player.rect.x = self.player.rect.x - self.size_block / 30
         self.player.rect.y = self.player.rect.y - self.size_block / 30
@@ -40,6 +40,7 @@ class GameWidget(QWidget):
         self.score = 0
         self.Go_always = [0, 0, 0, 0]
         self.Open = 0
+        self.blows = 0
 
         self.sum_list_collide_objects = []
         self.sum_list_collide_objects += [i for i in self.generation.sum_list_collide_objects]
@@ -76,7 +77,7 @@ class GameWidget(QWidget):
         self.Open = 0
 
         self.update(0, 0, self.width(), self.height())
-        self.clock.tick(60)
+        self.clock.tick(100)
 
     def group_draw_update(self, group, params):
         group.draw(self.screen)
@@ -110,12 +111,15 @@ class GameWidget(QWidget):
             case "k": self.blows += 1 if on else -1
             case "л": self.blows += 1 if on else -1
 
-        if self.Go_always[2] == self.Go_always[3]:
-            self.player.Go_x = False
-            self.player.direction[2], self.player.direction[3] = self.Go_always[0], self.Go_always[1]
-        else:
-            self.player.Go_x = True
-            self.player.direction[0], self.player.direction[1] = (False, True) if self.Go_always[3] else (True, False)
+        if not (self.Go_always[0] or self.Go_always[1] or self.Go_always[2] or self.Go_always[3]):
+            self.player.Go = False
+            return
+        self.player.Go = True
+
+        self.player.direction[0] = self.Go_always[2]
+        self.player.direction[1] = self.Go_always[3]
+        self.player.direction[2] = self.Go_always[0]
+        self.player.direction[3] = self.Go_always[1]
 
     def mousePressEvent(self, a0):
         """
