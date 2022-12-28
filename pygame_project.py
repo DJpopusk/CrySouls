@@ -24,7 +24,7 @@ class GameWidget(QWidget):
 
         self.generation = Generation()
         self.size_block = 40
-        self.generation.create_level(self.size_block, 10, 10, [6, 10], [6, 15])
+        self.generation.create_level(self.size_block, 9, 9, [5, 7], [6, 10])
 
         self.player.rect.x = self.player.rect.x - self.size_block / 30
         self.player.rect.y = self.player.rect.y - self.size_block / 30
@@ -77,7 +77,7 @@ class GameWidget(QWidget):
         self.Open = 0
 
         self.update(0, 0, self.width(), self.height())
-        self.clock.tick(100)
+        self.clock.tick(60)
 
     def group_draw_update(self, group, params):
         group.draw(self.screen)
