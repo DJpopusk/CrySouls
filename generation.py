@@ -43,7 +43,7 @@ class Generation:
         self.classes = [Base, Wall, Drill, Chest, Box, Door, Bed, Enemy]
         self.groups = [base_group, wall_group, drill_group, chest_group, box_group, door_group, bed_group, enemy_group]
 
-    def create_level(self, size_object, width=10, height=10, count_room=(6, 10), count_enemy=(3, 10)):
+    def create_level(self, size_object, width=9, height=9, count_room=(6, 10), count_enemy=(3, 10)):
         def block_select(block, a, over):
             if over:
                 if block < a:
@@ -213,7 +213,7 @@ class Generation:
         direction = [0, 0, 0, 0] if direction is None else direction
 
         my_room = self.create_room(len_room_w, len_room_h)
-        my_room[len_room_h // 2 - 1][len_room_w // 2 - 1] = self.chest_image
+        my_room[len_room_h // 2][len_room_w // 2] = self.chest_image
         my_room = self.exit_room(my_room, direction)
         return my_room
 
