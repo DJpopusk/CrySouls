@@ -24,7 +24,7 @@ class GameWidget(QWidget):
 
         self.generation = Generation()
         self.size_block = 40
-        self.generation.create_level(self.size_block, 9, 9, [5, 7], [6, 10])
+        self.generation.create_level(self.size_block, 9, 9, [4, 7], [6, 10])
 
         self.player.rect.x = self.player.rect.x - self.size_block / 30
         self.player.rect.y = self.player.rect.y - self.size_block / 30
@@ -141,7 +141,17 @@ class GameWidget(QWidget):
         for i in self.sum_list_collide_objects:
             i.resize(self.width(), self.height(), self.size_block)
 
-        rect = self.sum_list_collide_objects[0]
+        ind = 0
+        n = 5000
+        for i in self.sum_list_collide_objects:
+            if n > abs(i.rect.x) - self.width() // 2:
+                n = abs(i.rect.x) - self.width() // 2
+                ind = self.sum_list_collide_objects.index(i)
+            if n > abs(i.rect.y) - self.height() // 2:
+                n = abs(i.rect.y) - self.height() // 2
+                ind = self.sum_list_collide_objects.index(i)
+
+        rect = self.sum_list_collide_objects[ind]
         self.player.rect.centerx -= rect.old_center[0] - rect.rect.centerx
         self.player.rect.centery -= rect.old_center[1] - rect.rect.centery
 
