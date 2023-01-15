@@ -1,7 +1,6 @@
 import pygame
 from wall import Wall
 from player import Player
-from random import randint
 
 
 class Enemy(Wall):
@@ -13,7 +12,9 @@ class Enemy(Wall):
         self.region = pygame.Rect(pos[0] - 160, pos[1] - 160, 320, 320)
         self.__resize = 1
         self.Go, self.Frame = False, 0
-        self.attacking = True
+        path = ['ZLO_0.png', 'ZLO_1.png', 'ZLO_2.png', 'ZLO_3.png']
+        self.images = [pygame.image.load(f"image/ZLO/{i}").convert_alpha() for i in path]
+        self.default_image = self.image
 
     def update_region(self):
         """функция которая обновляет область вокруг врага"""
@@ -29,16 +30,25 @@ class Enemy(Wall):
         self.image = pygame.transform.scale(self.image, (k * self.rect.width, k * self.rect.height))
         self.rect = self.image.get_rect(center=self.rect.center)
 
+        rect = self.default_image.get_rect()
+        self.default_image = pygame.transform.scale(self.default_image, (k * rect.width, k * rect.height))
+
+        for i in self.images:
+            ind = self.images.index(i)
+            rect = i.get_rect()
+            self.images[ind] = pygame.transform.scale(i, (k * rect.width * 2, k * rect.height * 2))
+
     def update(self, collider_player: Player, speed: list, key: list, walls):
         self.update_region()
         self.animation()
         self._update(collider_player, speed, key)
-        self._go(collider_player, walls)
+        self._go(collider_player)
         self._update_pos(walls)
 
-    def _go(self, collider_player: Player, walls):
+    def _go(self, collider_player):
         # надо прописать логику подойти ударить отойти
-        if self.attacking and self.region.colliderect(collider_player.rect):  # двигается на игрока
+        if self.region.colliderect(collider_player.rect):
+            self.Go = True
             if collider_player.rect.centerx - 100 > self.rect.centerx:
                 self.rect.centerx += 2
             elif collider_player.rect.centerx + 100 < self.rect.centerx:
@@ -47,36 +57,9 @@ class Enemy(Wall):
                 self.rect.centery += 2
             elif collider_player.rect.centery + 100 < self.rect.centery:
                 self.rect.centery -= 2
-            else:
-                self.hit(collider_player)
-                self.attacking = False
-        else:  # двигается от игрока
-            pos = collider_player.get_pos()  # +_+ 38 62 160
-            a = randint(0, 4)
-            if a == 0:
-                if self.region.colliderect(collider_player.rect) and any([any([not self.rect.colliderect(i) for i in j]) for j
-                                                                         in walls]):
-                    self.rect.centery += 2
-                else:
-                    self.attacking = True
-            elif a == 1:
-                if self.region.colliderect(collider_player.rect) and any([any([not self.rect.colliderect(i) for i in j]) for j
-                                                                         in walls]):
-                    self.rect.centerx += 2
-                else:
-                    self.attacking = True
-            elif a == 2:
-                if self.region.colliderect(collider_player.rect) and any([any([not self.rect.colliderect(i) for i in j]) for j
-                                                                         in walls]):
-                    self.rect.centery -= 2
-                else:
-                    self.attacking = True
-            elif a == 3:
-                if self.region.colliderect(collider_player.rect) and any([any([not self.rect.colliderect(i) for i in j]) for j
-                                                                         in walls]):
-                    self.rect.centerx -= 2
-                else:
-                    self.attacking = True
+        else:
+            self.Go = False
+
     def _update_pos(self, walls):
         for j in walls:
             for i in j:
@@ -102,21 +85,8 @@ class Enemy(Wall):
             self.Frame += 0.2
             if self.Frame > 3:
                 self.Frame -= 3
-            Personnel = ['ZLO_0.png', 'ZLO_1.png', 'ZLO_2.png', 'ZLO_3.png']
-            self.image_text = f"../image/ZLO/{Personnel[int(self.Frame)]}"
-            self.image = pygame.image.load(f"image/ZLO/{Personnel[int(self.Frame)]}").convert_alpha()
-            self.rect = self.image.get_rect(center=self.rect.center)
-            self.image = pygame.transform.scale(self.image, (self.__resize * 2.5 * self.rect.width,
-                                                             self.__resize * 2.5 * self.rect.height))
+            self.image_text = f"../{self.images[int(self.Frame)]}"
+            self.image = self.images[int(self.Frame)]
         else:
-            self.image = pygame.image.load("textures/enemy_golem.png").convert_alpha()
-            self.rect = self.image.get_rect(center=self.rect.center)
-            self.image = pygame.transform.scale(self.image, (self.__resize * self.rect.width,
-                                                             self.__resize * self.rect.height))
-        self.rect = self.image.get_rect(center=self.rect.center)
-
-    def hit(self, player):
-        pass  # пока заглушкка, нужно реализовать снятие hp у перса
-
-    def player_coord(self, player: Player):
-        return player.get_pos()
+            self.image = self.default_image
+            self.image_text = "textures/enemy_golem.PNG"
