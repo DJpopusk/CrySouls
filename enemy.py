@@ -51,7 +51,6 @@ class Enemy(Wall):
         # надо прописать логику подойти ударить отойти
 
         if self.attacking and self.region.colliderect(collider_player.rect):  # двигается на игрока
-            self.Go = True
             if collider_player.rect.centerx - 100 > self.rect.centerx:
                 self.rect.centerx += 2
             elif collider_player.rect.centerx + 100 < self.rect.centerx:
@@ -64,7 +63,6 @@ class Enemy(Wall):
                 self.hit(collider_player)
                 self.attacking = False
         else:  # двигается от игрока
-            self.Go = True
             pos = collider_player.get_pos()  # +_+ 38 62 160
             a = randint(0, 4)
             if a == 0:
@@ -95,8 +93,6 @@ class Enemy(Wall):
                     self.rect.centerx -= 2
                 else:
                     self.attacking = True
-        if self.region.colliderect(collider_player.rect):
-            self.Go = False
 
     def _update_pos(self, walls):
         for j in walls:
@@ -119,15 +115,11 @@ class Enemy(Wall):
                             self.rect.top = i.rect.bottom
 
     def animation(self):
-        if self.Go:
-            self.Frame += 0.2
-            if self.Frame > 3:
-                self.Frame -= 3
-            self.image_text = f"../{self.images[int(self.Frame)]}"
-            self.image = self.images[int(self.Frame)]
-        else:
-            self.image = self.default_image
-            self.image_text = "textures/enemy_golem.PNG"
+        self.Frame += 0.2
+        if self.Frame > 3:
+            self.Frame -= 3
+        self.image_text = f"../{self.images[int(self.Frame)]}"
+        self.image = self.images[int(self.Frame)]
 
     def hit(self, player):
         pass  # пока заглушкка, нужно реализовать снятие hp у перса
