@@ -14,4 +14,8 @@ class Chest(Box):
         Box.open(self)
         self.animation()
 
-    def animation(self): ...
+    def animation(self):
+        if self._open:
+            ...
+        else:
+            ...
