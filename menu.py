@@ -320,7 +320,7 @@ QProgressBar::chunk {
         self.information_1.setText(_translate("GameGL", BETA_text))
         self.information_2.setText(_translate("GameGL", "Text ..."))
         self.information_3.setText(_translate("GameGL", "Музыка была взята с сайта Bensound.com"))
-        self.game_score.setText(_translate("GameGL", "scpre: 0"))
+        self.game_score.setText(_translate("GameGL", "score: 0"))
 
         self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(self)

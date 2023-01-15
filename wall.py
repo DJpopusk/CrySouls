@@ -50,3 +50,5 @@ class Wall(pygame.sprite.Sprite):
             self.rect.x += speed[0]
         if key[3]:
             self.rect.x -= speed[0]
+    def  get_pos(self):
+        return self.pos

@@ -125,3 +125,5 @@ class Player(pygame.sprite.Sprite):
                         not up == self.animation_up[len(self.animation_up) - 1]:
                     self.animation_up[0] = not self.animation_up[0]
                 return
+    def get_pos(self):
+        return self.rect.center

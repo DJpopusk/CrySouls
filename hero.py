@@ -50,6 +50,9 @@ class PLAYER(pygame.sprite.Sprite):
         self.dx = 0
         self.dy = 0
 
+    def get_pos(self):
+        return self.rect.center
+
 
 pygame.init()
 width, height = 500, 500
