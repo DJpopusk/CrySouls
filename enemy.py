@@ -24,12 +24,11 @@ class Enemy(Wall):
             self.region = pygame.Rect(self.rect.centerx - 160, self.rect.centery - 160, 320, 320)
 
     def resize(self, width, height, size_block):
-        self.image = pygame.image.load(f"textures\\{self.image_text}").convert_alpha()
-        self.rect = self.image.get_rect(center=self.rect.center)
+        path = ['ZLO_0.png', 'ZLO_1.png', 'ZLO_2.png', 'ZLO_3.png']
+        self.images = [pygame.image.load(f"image/ZLO/{i}").convert_alpha() for i in path]
 
         k = width / height / 5 * size_block / 30
         self.__resize = k
-        self.image = pygame.transform.scale(self.image, (k * self.rect.width, k * self.rect.height))
         self.rect = self.image.get_rect(center=self.rect.center)
 
         rect = self.default_image.get_rect()
