@@ -29,6 +29,11 @@ class Player(pygame.sprite.Sprite):
         for direction in self.path:
             self.images.append([pygame.image.load(i).convert_alpha() for i in direction])
 
+        self.images_udar = []
+        for direction, path_udar in zip(["left", "right", "up", "down"], [[j for j in range(i)] for i in [3, 3, 8, 8]]):
+            self.images_udar.append([pygame.image.load(f"image/{direction}/udar{i}.png").convert_alpha() for i in
+                                     [i for i in path_udar]])
+
         self.default_image = [pygame.image.load(f"image/{i}/main.png").convert_alpha()
                               for i in ["left", "right", "up", "down"]]
 
@@ -118,10 +123,10 @@ class Player(pygame.sprite.Sprite):
                 self.image = self.default_image[file]
         else:
             if not self.Go:
-                self.Frame += 0.3
+                self.Frame += 0.2
                 if self.Frame >= 3:
                     self.Frame = 0
-                self.image = self.images[file][int(self.Frame)]
+                self.image = self.images_udar[file][int(self.Frame)]
             else:
                 self.images = self.default_image[file]
 
