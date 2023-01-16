@@ -1,7 +1,7 @@
 import pygame
 
 
-class PORTAL(pygame.sprite.Sprite):
+class PortalE(pygame.sprite.Sprite):
     def __init__(self, x, y, file):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(file).convert_alpha()
