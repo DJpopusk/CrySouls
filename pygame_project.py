@@ -24,10 +24,10 @@ class GameWidget(QWidget):
 
         self.generation = Generation()
         self.size_block = 40
-        self.generation.create_level(self.size_block, 10, 10, [4, 7], [6, 10])
+        self.level = self.generation.create_level(self.size_block, 10, 10, [4, 7], [6, 10])
 
-        self.player.rect.x = self.player.rect.x - self.size_block / 30
-        self.player.rect.y = self.player.rect.y - self.size_block / 30
+        self.player.rect.x = self.level[24].rect.centerx - self.size_block
+        self.player.rect.y = self.level[24].rect.centery - self.size_block
 
         self.Exit = False
         self.paint = True
@@ -45,8 +45,8 @@ class GameWidget(QWidget):
         self.sum_list_collide_objects = []
         self.sum_list_collide_objects += [i for i in self.generation.sum_list_collide_objects]
 
-        l = self.generation.list_collide_objects
-        self.list_open_collide_objects = [j for i in l[3:7] + l[8:] for j in i]
+        lst = self.generation.list_collide_objects
+        self.list_open_collide_objects = [j for i in lst[3:7] + lst[8:] for j in i]
 
         self.groups = self.generation.groups
         self.clock = pygame.time.Clock()
@@ -66,16 +66,17 @@ class GameWidget(QWidget):
         for i in self.groups[:7] + self.groups[8:]:
             self.group_draw_update(i, (self.player, [self.player.player_speed_x, self.player.player_speed_y],
                                        self.Go_always))
-        l = self.generation.list_collide_objects
+        lst = self.generation.list_collide_objects
         self.group_draw_update(self.groups[7], (self.player, [self.player.player_speed_x,
-                               self.player.player_speed_y], self.Go_always, l[:7] + l[8:]))
+                               self.player.player_speed_y], self.Go_always, lst[:7] + lst[8:]))
 
         # [pygame.draw.rect(self.screen, (255, 100, 0), i.region) for i in self.generation.list_collide_objects[7]]
         # pygame.draw.rect(self.screen, (255, 0, 0), self.player.region)  # эта строка отображает дальность
         # взаимодействия игрока
 
         self.group_draw_update(player_group, (self.width(), self.height(), self.sum_list_collide_objects,
-                                              self.list_open_collide_objects, self.Open, self.blows, self.size_block))
+                                              self.list_open_collide_objects, self.Open, self.blows, self.size_block,
+                                              self.level))
         self.Open = 0
 
         self.update(0, 0, self.width(), self.height())
@@ -84,6 +85,20 @@ class GameWidget(QWidget):
     def group_draw_update(self, group, params):
         group.draw(self.screen)
         group.update(*params)
+        if group != player_group:
+            return
+
+        if not params[7]:
+            self.generation = Generation()
+            self.level = self.generation.create_level(self.size_block, 10, 10, [4, 7], [6, 10])
+            self.sum_list_collide_objects = []
+            self.sum_list_collide_objects += [i for i in self.generation.sum_list_collide_objects]
+            lst = self.generation.list_collide_objects
+            self.list_open_collide_objects = [j for i in lst[3:7] + lst[8:] for j in i]
+            self.groups = self.generation.groups
+            self.player.rect.x = self.level[24].rect.centerx - self.size_block
+            self.player.rect.y = self.level[24].rect.centery - self.size_block
+            self.resizeEvent(None)
 
     def keyPressEvent(self, a0):
         self.key_on(a0, True)
@@ -151,7 +166,7 @@ class GameWidget(QWidget):
                 ind = self.sum_list_collide_objects.index(i)
             if n > abs(i.rect.y) - self.height() // 2:
                 n = abs(i.rect.y) - self.height() // 2
-                ind = self.sum_list_collide_objects.index(i)
+                ind += self.sum_list_collide_objects.index(i)
 
         rect = self.sum_list_collide_objects[ind]
         self.player.rect.centerx -= rect.old_center[0] - rect.rect.centerx
