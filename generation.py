@@ -60,6 +60,7 @@ class Generation:
                     block = a
             return block
 
+        objects = []
         generations = [self.generation_enemy_room for _ in range(3)] + [self.generation_chest_room]
         count_room = random.randint(count_room[0], count_room[1])
         transform = [0, 0]
@@ -122,23 +123,25 @@ class Generation:
                 direction[2] = 1
 
             if j == count_room - 1:
-                self.draw_room(self.generation_exit_level_room(width, height, direction), size_object, transform, j)
-                return
+                objects += self.draw_room(self.generation_exit_level_room(width, height, direction), size_object,
+                                          transform, j)
+                return objects
 
             gnr = generations[random.randint(0, len(generations) - 1)] if j > 0 else self.generation_house_room
             if gnr == self.generation_enemy_room:
-                self.draw_room(self.generation_enemy_room(width, height, direction, [count_enemy[0], count_enemy[1]]),
-                               size_object, transform, j)
+                objects += self.draw_room(self.generation_enemy_room(width, height, direction, [count_enemy[0],
+                                          count_enemy[1]]), size_object, transform, j)
             else:
-                self.draw_room(gnr(width, height, direction), size_object, transform, j)
+                objects += self.draw_room(gnr(width, height, direction), size_object, transform, j)
 
             transform[0] = transform[0] + width * size_object * next_random_x[1] if next_horizontal_on[1]\
                 else transform[0]
             transform[1] = transform[1] + height * size_object * next_random_y[1] if not next_horizontal_on[1]\
                 else transform[1]
 
-            self.draw_room(self.generation_corridor(height, width, not next_horizontal_on[1]), size_object,
-                           [transform[0], transform[1]], j)
+            objects += self.draw_room(self.generation_corridor(height, width, not next_horizontal_on[1]), size_object,
+                                      [transform[0], transform[1]], j)
+        return objects
 
     def draw_room(self, generation, size_object, transfer=(0, 0), number_room=0):
         for a, b in enumerate(generation):
