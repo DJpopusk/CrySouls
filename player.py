@@ -2,7 +2,7 @@ import pygame
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos: tuple, group, player_image="main.PNG", player_speed=(5, 5)):
+    def __init__(self, pos: tuple, group, player_image="main.PNG", player_speed=(20, 20)):
         pygame.sprite.Sprite.__init__(self)
         self.image_text = player_image
         self.image = pygame.image.load(f"image\\right\\{self.image_text}").convert_alpha()
@@ -37,13 +37,13 @@ class Player(pygame.sprite.Sprite):
         self.default_image = [pygame.image.load(f"image/{i}/main.png").convert_alpha()
                               for i in ["left", "right", "up", "down"]]
 
-    def update(self, width, height, walls: list, collide: list, key_open, key_blows, size_block):
-        self.update_region(width, height, key_open, key_blows, collide)
+    def update(self, width, height, walls: list, collide: list, key_open, key_blows, size_block, level):
+        self.update_region(width, height, key_open, key_blows, collide, level)
         self._animation(key_blows)
         self.resize(width, height, size_block)
         self._update_pos(width, height, walls)
 
-    def update_region(self, width, height, key_open, key_blows, collide):
+    def update_region(self, width, height, key_open, key_blows, collide, level):
         """
         функция которая обновляет область вокруг персонажа
 
@@ -52,6 +52,7 @@ class Player(pygame.sprite.Sprite):
         :param key_open: нажата ли клавиша открывающая что-то
         :param key_blows: нажата ли клавиша атаки
         :param collide: объекты с которыми можно взаимодействовать
+        :param level: список всех объектов на карте
         """
         if self.region.left != width // 2 - 80 or self.region.top != height // 2 - 80:
             self.region = pygame.Rect(width // 2 - 80, height // 2 - 80, 160, 160)
@@ -59,7 +60,7 @@ class Player(pygame.sprite.Sprite):
         if key_open:
             for i in collide:
                 if i.rect.colliderect(self.region):
-                    i.open(width, height)
+                    i.open(width, height, level)
 
     def _update_pos(self, width, height, walls):
         """
