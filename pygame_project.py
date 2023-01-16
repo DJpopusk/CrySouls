@@ -45,7 +45,7 @@ class GameWidget(QWidget):
         self.sum_list_collide_objects = []
         self.sum_list_collide_objects += [i for i in self.generation.sum_list_collide_objects]
 
-        self.list_open_collide_objects = [j for i in self.generation.list_collide_objects[3:7] for j in i]
+        self.list_open_collide_objects = [j for i in self.generation.list_collide_objects[3:8] for j in i]
 
         self.groups = self.generation.groups
         self.clock = pygame.time.Clock()
@@ -62,11 +62,11 @@ class GameWidget(QWidget):
 
         if pygame.rect.Rect.collidelist(self.player.rect, self.sum_list_collide_objects) == -1:
             self.player.collide = False
-        for i in self.groups[:7]:
+        for i in self.groups[:7] + self.groups[8:]:
             self.group_draw_update(i, (self.player, [self.player.player_speed_x, self.player.player_speed_y],
                                        self.Go_always))
         self.group_draw_update(self.groups[7], (self.player, [self.player.player_speed_x,
-                               self.player.player_speed_y], self.Go_always, self.generation.list_collide_objects[:8]))
+                               self.player.player_speed_y], self.Go_always, self.generation.list_collide_objects[:7]))
 
         # [pygame.draw.rect(self.screen, (255, 100, 0), i.region) for i in self.generation.list_collide_objects[7]]
         # pygame.draw.rect(self.screen, (255, 0, 0), self.player.region)  # эта строка отображает дальность
@@ -165,7 +165,7 @@ class GameWidget(QWidget):
             p.drawImage(0, 0, img)
 
     def closeEvent(self, a):
-        # SQL
+        # добавить SQL
 
         QWidget.closeEvent(self, a)
         pygame.event.post(pygame.event.Event(pygame.QUIT))
