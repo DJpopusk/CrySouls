@@ -24,7 +24,7 @@ class GameWidget(QWidget):
 
         self.generation = Generation()
         self.size_block = 40
-        self.generation.create_level(self.size_block, 9, 9, [4, 7], [6, 10])
+        self.generation.create_level(self.size_block, 10, 10, [4, 7], [6, 10])
 
         self.player.rect.x = self.player.rect.x - self.size_block / 30
         self.player.rect.y = self.player.rect.y - self.size_block / 30
@@ -66,7 +66,7 @@ class GameWidget(QWidget):
             self.group_draw_update(i, (self.player, [self.player.player_speed_x, self.player.player_speed_y],
                                        self.Go_always))
         self.group_draw_update(self.groups[7], (self.player, [self.player.player_speed_x,
-                               self.player.player_speed_y], self.Go_always, self.generation.list_collide_objects[:7]))
+                               self.player.player_speed_y], self.Go_always, self.generation.list_collide_objects[:8]))
 
         # [pygame.draw.rect(self.screen, (255, 100, 0), i.region) for i in self.generation.list_collide_objects[7]]
         # pygame.draw.rect(self.screen, (255, 0, 0), self.player.region)  # эта строка отображает дальность
