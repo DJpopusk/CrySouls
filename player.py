@@ -21,12 +21,12 @@ class Player(pygame.sprite.Sprite):
         self.direction = [False, True, False, False]  # Left, Right, Up, Down
 
         path_png = ['0.png', '1.png', '2.png', '3.png', '4.png', '5.png', '6.png', '7.png']
-        path = []
+        self.path = []
         for direction in ["left", "right", "up", "down"]:
-            path.append([f"image\\{direction}\\{png}" for png in path_png])
+            self.path.append([f"image\\{direction}\\{png}" for png in path_png])
 
         self.images = []
-        for direction in path:
+        for direction in self.path:
             self.images.append([pygame.image.load(i).convert_alpha() for i in direction])
 
         self.default_image = [pygame.image.load(f"image/{i}/main.png").convert_alpha()
@@ -76,13 +76,15 @@ class Player(pygame.sprite.Sprite):
             self.rect.x = width // 2 - self.rect.width // 2
 
     def resize(self, width, height, size_block):
-        # self.image = pygame.image.load(self.image_text).convert_alpha()
-        # self.rect = self.image.get_rect(center=self.rect.center)
+        self.images = []
+        for direction in self.path:
+            self.images.append([pygame.image.load(i).convert_alpha() for i in direction])
 
-        # k = (width / height) * 0.5 * size_block / 30
-        # self.image = pygame.transform.scale(self.image, (k * self.rect.width, k * self.rect.height))
-        # self.rect = self.image.get_rect(center=self.rect.center)
-        ...
+        k = (width / height) * 0.5 * size_block / 30
+        for ind, path_png in enumerate(self.images):
+            for ind2, i in enumerate(path_png):
+                rect = i.get_rect()
+                self.images[ind][ind2] = pygame.transform.scale(i, (k * rect.width, k * rect.height))
 
     def _animation(self, key_udar):
         """
