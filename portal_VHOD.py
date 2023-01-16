@@ -14,6 +14,9 @@ class PortalV(Wall):
         path = ['portal_0.png', 'portal_1.png']
         self.images = [pygame.image.load(f"image/portalV/{i}").convert_alpha() for i in path]
 
+    def open(self, width, height):
+        ...
+
     def update(self, collider_player: Player, speed: list, key: list):
         self._update(collider_player, speed, key)
         self.animation()
