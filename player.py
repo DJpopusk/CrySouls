@@ -19,7 +19,18 @@ class Player(pygame.sprite.Sprite):
         self.Go = False
         self.Frame = 0
         self.direction = [False, True, False, False]  # Left, Right, Up, Down
-        self.path = "image\\right\\main.png"
+
+        path_png = ['0.png', '1.png', '2.png', '3.png', '4.png', '5.png', '6.png', '7.png']
+        path = []
+        for direction in ["left", "right", "up", "down"]:
+            path.append([f"image\\{direction}\\{png}" for png in path_png])
+
+        self.images = []
+        for direction in path:
+            self.images.append([pygame.image.load(i).convert_alpha() for i in direction])
+
+        self.default_image = [pygame.image.load(f"image/{i}/main.png").convert_alpha()
+                              for i in ["left", "right", "up", "down"]]
 
     def update(self, width, height, walls: list, collide: list, key_open, key_blows, size_block):
         self.update_region(width, height, key_open, key_blows, collide)
@@ -65,12 +76,13 @@ class Player(pygame.sprite.Sprite):
             self.rect.x = width // 2 - self.rect.width // 2
 
     def resize(self, width, height, size_block):
-        self.image = pygame.image.load(self.path).convert_alpha()
-        self.rect = self.image.get_rect(center=self.rect.center)
+        # self.image = pygame.image.load(self.image_text).convert_alpha()
+        # self.rect = self.image.get_rect(center=self.rect.center)
 
-        k = (width / height) * 0.5 * size_block / 30
-        self.image = pygame.transform.scale(self.image, (k * self.rect.width, k * self.rect.height))
-        self.rect = self.image.get_rect(center=self.rect.center)
+        # k = (width / height) * 0.5 * size_block / 30
+        # self.image = pygame.transform.scale(self.image, (k * self.rect.width, k * self.rect.height))
+        # self.rect = self.image.get_rect(center=self.rect.center)
+        ...
 
     def _animation(self, key_udar):
         """
@@ -86,36 +98,30 @@ class Player(pygame.sprite.Sprite):
             self.animation = False
 
         if self.direction[0]:
-            file = 'left'
+            file = 0
         elif self.direction[1]:
-            file = 'right'
+            file = 1
         elif self.direction[2]:
-            file = 'up'
-        elif self.direction[3]:
-            file = 'down'
+            file = 2
+        else:
+            file = 3
 
         if not key_udar or self.Go:
             if self.Go:
                 self.Frame += 0.2
                 if self.Frame > 7:
                     self.Frame -= 7
-                Personnel = ['0.png', '1.png', '2.png', '3.png', '4.png', '5.png', '6.png', '7.png']
-                self.path = f"image/{file}/{Personnel[int(self.Frame)]}"
-                self.image = pygame.image.load(self.path).convert_alpha()
+                self.image = self.images[file][int(self.Frame)]
             else:
-                self.path = f"image/{file}/main.png"
-                self.image = pygame.image.load(self.path).convert_alpha()
+                self.image = self.default_image[file]
         else:
             if not self.Go:
                 self.Frame += 0.3
                 if self.Frame >= 3:
                     self.Frame = 0
-                Personnel = ['udar0.png', 'udar1.png', 'udar2.png']
-                self.path = f"image/{file}/{Personnel[int(self.Frame)]}"
-                self.image = pygame.image.load(self.path).convert_alpha()
+                self.image = self.images[file][int(self.Frame)]
             else:
-                self.path = f"image/{file}/main.png"
-                self.image = pygame.image.load(self.path).convert_alpha()
+                self.images = self.default_image[file]
 
     def __update_animation_up(self, up):
         for i in range(1, len(self.animation_up)):
@@ -125,5 +131,6 @@ class Player(pygame.sprite.Sprite):
                         not up == self.animation_up[len(self.animation_up) - 1]:
                     self.animation_up[0] = not self.animation_up[0]
                 return
+
     def get_pos(self):
         return self.rect.center
