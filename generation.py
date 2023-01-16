@@ -7,6 +7,8 @@ from bed import Bed
 from base import Base
 from drill import Drill
 from enemy import Enemy
+from poralExit import PortalE
+from portal_VHOD import PortalV
 import random
 
 enemy_group = pygame.sprite.Group()
@@ -17,17 +19,19 @@ door_group = pygame.sprite.Group()
 bed_group = pygame.sprite.Group()
 base_group = pygame.sprite.Group()
 drill_group = pygame.sprite.Group()
+portal_e_group = pygame.sprite.Group()
+portal_v_group = pygame.sprite.Group()
 
 
 class Generation:
     def __init__(self):
-        self.bases, self.walls, self.drills, self.chests, self.boxes, self.doors, self.beds, self.enemies \
-            = [], [], [], [], [], [], [], []
+        self.bases, self.walls, self.drills, self.chests, self.boxes, self.doors, self.beds, self.enemies, \
+            self.portals_e, self.portals_v = [], [], [], [], [], [], [], [], [], []
 
         self.list_collide_objects = [self.bases, self.walls, self.drills, self.chests, self.boxes, self.doors,
-                                     self.beds, self.enemies]
+                                     self.beds, self.enemies, self.portals_e, self.portals_v]
         self.sum_list_collide_objects = [*self.bases, *self.walls, *self.drills, *self.chests, *self.boxes, *self.doors,
-                                         *self.beds, *self.enemies]
+                                         *self.beds, *self.enemies, *self.portals_e, *self.portals_v]
 
         self.base_image = "base.PNG"
         self.wall_image = "wall(f).PNG"
@@ -37,11 +41,14 @@ class Generation:
         self.door_image = "door(close).PNG"
         self.bed_image = "bed.PNG"
         self.enemy_image = "enemy_golem.PNG"
+        self.portalE_image = "../image/portalExit/portal_0.PNG"
+        self.portalV_image = "../image/portalV/portal_0.PNG"
         self.images = [self.base_image, self.wall_image, self.drill_image, self.chest_image, self.box_image,
-                       self.door_image, self.bed_image, self.enemy_image]
+                       self.door_image, self.bed_image, self.enemy_image, self.portalE_image, self.portalV_image]
 
-        self.classes = [Base, Wall, Drill, Chest, Box, Door, Bed, Enemy]
-        self.groups = [base_group, wall_group, drill_group, chest_group, box_group, door_group, bed_group, enemy_group]
+        self.classes = [Base, Wall, Drill, Chest, Box, Door, Bed, Enemy, PortalE, PortalV]
+        self.groups = [base_group, wall_group, drill_group, chest_group, box_group, door_group, bed_group, enemy_group, 
+                       portal_e_group, portal_v_group]
 
     def create_level(self, size_object, width=9, height=9, count_room=(6, 10), count_enemy=(3, 10)):
         def block_select(block, a, over):
@@ -114,21 +121,24 @@ class Generation:
                     or (up_or_down == -1 and not horizontal_on and j != 0):
                 direction[2] = 1
 
+            if j == count_room - 1:
+                self.draw_room(self.generation_exit_level_room(width, height, direction), size_object, transform, j)
+                return
+
             gnr = generations[random.randint(0, len(generations) - 1)] if j > 0 else self.generation_house_room
             if gnr == self.generation_enemy_room:
-                self.draw_room(gnr(width, height, direction, [count_enemy[0], count_enemy[1]]), size_object, transform,
-                               j)
+                self.draw_room(self.generation_enemy_room(width, height, direction, [count_enemy[0], count_enemy[1]]),
+                               size_object, transform, j)
             else:
                 self.draw_room(gnr(width, height, direction), size_object, transform, j)
 
-            if j != count_room - 1:
-                transform[0] = transform[0] + width * size_object * next_random_x[1] if next_horizontal_on[1]\
-                    else transform[0]
-                transform[1] = transform[1] + height * size_object * next_random_y[1] if not next_horizontal_on[1]\
-                    else transform[1]
+            transform[0] = transform[0] + width * size_object * next_random_x[1] if next_horizontal_on[1]\
+                else transform[0]
+            transform[1] = transform[1] + height * size_object * next_random_y[1] if not next_horizontal_on[1]\
+                else transform[1]
 
-                self.draw_room(self.generation_corridor(height, width, not next_horizontal_on[1]), size_object,
-                               [transform[0], transform[1]], j)
+            self.draw_room(self.generation_corridor(height, width, not next_horizontal_on[1]), size_object,
+                           [transform[0], transform[1]], j)
 
     def draw_room(self, generation, size_object, transfer=(0, 0), number_room=0):
         for a, b in enumerate(generation):
@@ -177,13 +187,17 @@ class Generation:
 
         return my_room
 
-    def generation_house_room(self, len_room_h, len_room_w, direction=None):
-        direction = [0, 0, 0, 0] if direction is None else direction
+    def generation_exit_level_room(self, len_room_h, len_room_w, direction=None):
+        my_room = self.create_room(len_room_h, len_room_w, direction)
 
-        my_room = self.create_room(len_room_h, len_room_w)
+        my_room[len_room_h // 2][len_room_w // 2] = self.portalE_image
+        return my_room
+
+    def generation_house_room(self, len_room_h, len_room_w, direction=None):
+        my_room = self.create_room(len_room_h, len_room_w, direction)
+
         my_room[1][1] = self.box_image
         my_room[len_room_h-3][1] = self.bed_image
-        my_room = self.exit_room(my_room, direction)
         if direction[2] == 1:
             my_room[len_room_h-3][0] = self.wall_image
             my_room[len_room_h-4][0] = self.wall_image
@@ -191,12 +205,9 @@ class Generation:
         return my_room
 
     def generation_enemy_room(self, len_room_h, len_room_w, direction=None, count_enemy=None):
-        direction = [0, 0, 0, 0] if direction is None else direction
+        my_room = self.create_room(len_room_h, len_room_w, direction)
+
         count_enemy = [3, 10] if count_enemy is None else count_enemy
-
-        my_room = self.create_room(len_room_h, len_room_w)
-        my_room = self.exit_room(my_room, direction)
-
         count_enemy = random.randint(count_enemy[0], count_enemy[1])
         for _ in range(count_enemy):
             Exit = False
@@ -210,15 +221,13 @@ class Generation:
         return my_room
 
     def generation_chest_room(self, len_room_h, len_room_w, direction=None):
-        direction = [0, 0, 0, 0] if direction is None else direction
+        my_room = self.create_room(len_room_h, len_room_w, direction)
 
-        my_room = self.create_room(len_room_w, len_room_h)
         my_room[len_room_h // 2][len_room_w // 2] = self.chest_image
-        my_room = self.exit_room(my_room, direction)
         return my_room
 
     def generation_corridor(self, len_room_h, len_room_w, h=True):
-        my_room = self.create_room(len_room_h, len_room_w)
+        my_room = self.create_list_room(len_room_h, len_room_w)
 
         for k in range(1, len(my_room) - 1):
             if h:
@@ -229,8 +238,14 @@ class Generation:
                 my_room[-1][k] = self.base_image
 
         return my_room
+    
+    def create_room(self, len_room_h, len_room_w, direction=None):
+        direction = [0, 0, 0, 0] if direction is None else direction
+        my_room = self.create_list_room(len_room_w, len_room_h)
+        my_room = self.exit_room(my_room, direction)
+        return my_room
 
-    def create_room(self, len_room_h, len_room_w):
+    def create_list_room(self, len_room_h, len_room_w):
         my_list = [[] for _ in range(len_room_h)]
         my_list[0] = [f"{self.wall_image}" for _ in range(len_room_w)]
         my_list[-1] = [f"{self.wall_image}" for _ in range(len_room_w)]
