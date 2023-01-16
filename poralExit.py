@@ -14,15 +14,18 @@ class PortalE(Wall):
         path = ['portal_0.png', 'portal_1.png']
         self.images = [pygame.image.load(f"image/portalExit/{i}").convert_alpha() for i in path]
 
-    def open(self, width, height):
-        ...
+    def open(self, *args):
+        self.teleport(args[2])
 
     def update(self, collider_player: Player, speed: list, key: list):
         self._update(collider_player, speed, key)
         self.animation()
-        self.teleport()
 
-    def teleport(self): ...
+    def teleport(self, level):
+        for i in level:
+            i.kill()
+        while level:
+            level.pop(-1)
 
     def animation(self):
         self.Frame += 0.2
