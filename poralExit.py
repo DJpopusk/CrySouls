@@ -28,7 +28,7 @@ class PortalE(Wall):
             level.pop(-1)
 
     def animation(self):
-        self.Frame += 0.2
-        if self.Frame > 1:
-            self.Frame -= 1
+        self.Frame += 0.05
+        if self.Frame > 2:
+            self.Frame -= 2
         self.image = self.images[int(self.Frame)]
