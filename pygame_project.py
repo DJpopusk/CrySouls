@@ -27,7 +27,7 @@ class GameWidget(QWidget):
         self.level = self.generation.create_level(self.size_block, 10, 10, [4, 7], [6, 10])
 
         self.player.rect.x = self.level[24].rect.centerx - self.size_block
-        self.player.rect.y = self.level[24].rect.centery - self.size_block
+        self.player.rect.y = self.level[24].rect.centery - self.size_block * 4
 
         self.Exit = False
         self.paint = True
@@ -51,6 +51,12 @@ class GameWidget(QWidget):
         self.groups = self.generation.groups
         self.clock = pygame.time.Clock()
 
+    def set_HP(self, damage):
+        self.HP -= damage
+        if not self.HP:
+            self.Go_always = [0, 0, 0, 0]
+            self.player.Go = False
+
     def pygame_loop(self):
         """
         функция в которой происходят все действия основного цикла
@@ -68,7 +74,7 @@ class GameWidget(QWidget):
                                        self.Go_always))
         lst = self.generation.list_collide_objects
         self.group_draw_update(self.groups[7], (self.player, [self.player.player_speed_x,
-                               self.player.player_speed_y], self.Go_always, lst[:7] + lst[8:]))
+                               self.player.player_speed_y], self.Go_always, lst[:7] + lst[8:], self.set_HP))
 
         # [pygame.draw.rect(self.screen, (255, 100, 0), i.region) for i in self.generation.list_collide_objects[7]]
         # pygame.draw.rect(self.screen, (255, 0, 0), self.player.region)  # эта строка отображает дальность
