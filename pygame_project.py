@@ -82,7 +82,7 @@ class GameWidget(QWidget):
 
         self.group_draw_update(player_group, (self.width(), self.height(), self.sum_list_collide_objects,
                                               self.list_open_collide_objects, self.Open, self.blows, self.size_block,
-                                              self.level))
+                                              self.level, self.set_HP))
         self.Open = 0
 
         self.update(0, 0, self.width(), self.height())
