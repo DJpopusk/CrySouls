@@ -16,6 +16,7 @@ class Player(pygame.sprite.Sprite):
         self.animation_up = [True for _ in range(self.len_anim)]
         self.region = pygame.Rect(pos[0] - 80, pos[1] - 80, 160, 160)
 
+        self.regeneration = 20
         self.Go = False
         self.Frame = 0
         self.direction = [False, True, False, False]  # Left, Right, Up, Down
@@ -37,16 +38,17 @@ class Player(pygame.sprite.Sprite):
         self.default_image = [pygame.image.load(f"image/{i}/main.png").convert_alpha()
                               for i in ["left", "right", "up", "down"]]
 
-    def update(self, width, height, walls: list, collide: list, key_open, key_blows, size_block, level):
-        self.update_region(width, height, key_open, key_blows, collide, level)
+    def update(self, width, height, walls: list, collide: list, key_open, key_blows, size_block, level, hp):
+        self.update_region(width, height, key_open, key_blows, collide, level, hp)
         self._animation(key_blows)
         self.resize(width, height, size_block)
         self._update_pos(width, height, walls)
 
-    def update_region(self, width, height, key_open, key_blows, collide, level):
+    def update_region(self, width, height, key_open, key_blows, collide, level, hp):
         """
         функция которая обновляет область вокруг персонажа
 
+        :param hp: функция которая меняет уровень hp перса
         :param width: ширена экрана
         :param height: высота экрана
         :param key_open: нажата ли клавиша открывающая что-то
@@ -60,7 +62,7 @@ class Player(pygame.sprite.Sprite):
         if key_open:
             for i in collide:
                 if i.rect.colliderect(self.region):
-                    i.open(width, height, level)
+                    i.open(hp, self.regeneration, level)
 
     def _update_pos(self, width, height, walls):
         """
