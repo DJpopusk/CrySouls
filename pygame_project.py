@@ -103,7 +103,7 @@ class GameWidget(QWidget):
             self.list_open_collide_objects = [j for i in lst[3:7] + lst[8:] for j in i]
             self.groups = self.generation.groups
             self.player.rect.x = self.level[24].rect.centerx - self.size_block
-            self.player.rect.y = self.level[24].rect.centery - self.size_block
+            self.player.rect.y = self.level[24].rect.centery - self.size_block * 4
             self.resizeEvent(None)
 
     def keyPressEvent(self, a0):
