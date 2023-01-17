@@ -14,6 +14,7 @@ class Enemy(Wall):
         self.__resize = 1
         self.Go, self.Frame = False, 0
         self.attacking = True
+        self.damage = 2
         path = ['ZLO_0.png', 'ZLO_1.png', 'ZLO_2.png', 'ZLO_3.png']
         self.images = [pygame.image.load(f"image/ZLO/{i}").convert_alpha() for i in path]
         self.default_image = self.image
@@ -39,14 +40,14 @@ class Enemy(Wall):
             rect = i.get_rect()
             self.images[ind] = pygame.transform.scale(i, (k * rect.width * 2, k * rect.height * 2))
 
-    def update(self, collider_player: Player, speed: list, key: list, walls):
+    def update(self, collider_player: Player, speed: list, key: list, walls, hp=None):
         self.update_region()
         self.animation()
         self._update(collider_player, speed, key)
-        self._go(collider_player, walls)
+        self._go(collider_player, walls, hp)
         self._update_pos(walls)
 
-    def _go(self, collider_player: Player, walls):
+    def _go(self, collider_player: Player, walls, hp):
         # надо прописать логику подойти ударить отойти
 
         if self.attacking and self.region.colliderect(collider_player.rect):  # двигается на игрока
@@ -59,7 +60,7 @@ class Enemy(Wall):
             elif collider_player.rect.centery + 100 < self.rect.centery:
                 self.rect.centery -= 2
             else:
-                self.hit(collider_player)
+                self.hit(hp)
                 self.attacking = False
         else:  # двигается от игрока
             pos = collider_player.get_pos()  # +_+ 38 62 160
@@ -120,8 +121,8 @@ class Enemy(Wall):
         self.image_text = f"../{self.images[int(self.Frame)]}"
         self.image = self.images[int(self.Frame)]
 
-    def hit(self, player):
-        pass  # пока заглушкка, нужно реализовать снятие hp у перса
+    def hit(self, hp):
+        hp(self.damage)
 
     def player_coord(self, player: Player):
         return player.get_pos()
