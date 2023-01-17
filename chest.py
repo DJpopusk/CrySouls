@@ -11,11 +11,7 @@ class Chest(Box):
         self._update(collider_player, speed, key)
 
     def open(self, *args):
-        Box.open(self)
+        Box.open(self, *args)
         self.animation()
 
-    def animation(self):
-        if self._open:
-            ...
-        else:
-            ...
+    def animation(self): ...
