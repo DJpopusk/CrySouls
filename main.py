@@ -24,9 +24,14 @@ class Result(MenuWidget, GameWidget):
 
             if not self.game_timer_on:
                 self.game_timer_on = True
-                self.game_timer.start(7)
+                self.game_timer.start(5)
 
             if not self.progressBar.value():
+                for i in self.level:
+                    i.kill()
+                while self.level:
+                    self.level.pop(-1)
+
                 self.score = 0
                 self.score_on, self.start = False, False
                 self.play.setText("Играть")
