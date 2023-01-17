@@ -392,6 +392,7 @@ QProgressBar::chunk {
     def __play(self):
         self.tabWidget.setCurrentIndex(3)
         self.start, self.score_on = True, True
+        self.HP = 100
         self.progressBar.setValue(self.HP)
 
     def __replace_color(self):
