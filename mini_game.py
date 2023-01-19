@@ -40,7 +40,7 @@ def set_click(a: keyboard.KeyboardEvent):
         repeat = False
 
 
-def main(screen, update, width, height):
+def main(width, height, screen, update):
     global active, user_text, color, color_active, color_passive, KOMANDA_VIJGRISHA_ILI_NET
     input_rect = pygame.Rect(width // 2 - width // 20, height // 2, width // 8, height // 8)
     while True:
