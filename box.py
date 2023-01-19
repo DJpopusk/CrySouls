@@ -14,5 +14,4 @@ class Box(Wall):
     def open(self, *args):
         if not self.is_open:
             self.is_open = True
-            print(args[0], args[1])
             args[0](-args[1])
