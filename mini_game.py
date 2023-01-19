@@ -171,9 +171,3 @@ def main(screen, update, width, height):
         pygame.display.update()
         update()
         clock.tick(10)
-
-
-if __name__ == "__main__":
-    size = main_width, main_height = 800, 400
-    main_screen = pygame.display.set_mode(size)
-    main(main_screen, lambda: ..., main_width, main_height)
