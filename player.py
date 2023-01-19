@@ -66,7 +66,7 @@ class Player(pygame.sprite.Sprite):
                 if i.rect.colliderect(self.region):
                     o = i.open(hp, self.regeneration, level)
                     if o == "mini-game":
-                        if not main(screen[0], screen[1], width, height):
+                        if not main(width, height, screen[0], screen[1]):
                             exit()
 
     def _update_pos(self, width, height, walls):
