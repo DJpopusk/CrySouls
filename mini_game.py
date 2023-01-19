@@ -1,5 +1,6 @@
 import random
 import pygame
+import keyboard
 from konec_VIJGRAL import draw
 from konec_PROIGRISH import draw as draw2
 
@@ -26,33 +27,33 @@ color_passive = pygame.Color(0, 255, 0)
 color = color_passive
 
 active = False
+repeat = False
+
+
+def set_click(a: keyboard.KeyboardEvent):
+    global user_text, repeat
+    if a.event_type == "down" and not repeat:
+        repeat = True
+        if a.name:
+            user_text = user_text + a.name if a.name != "backspace" else user_text[:-1]
+    elif a.event_type == "up":
+        repeat = False
 
 
 def main(screen, update, width, height):
     global active, user_text, color, color_active, color_passive, KOMANDA_VIJGRISHA_ILI_NET
     input_rect = pygame.Rect(width // 2 - width // 20, height // 2, width // 8, height // 8)
     while True:
+        keyboard.hook(set_click)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if input_rect.collidepoint(event.pos):
-                    active = True
-                else:
-                    active = False
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_BACKSPACE:
-                    user_text = user_text[:-1]
-                else:
-                    user_text += event.unicode
-
-        screen.fill((0, 0, 0))
-        if active:
-            color = color_active
-        else:
-            color = color_passive
+                exit()
+            # if event.type == pygame.KEYDOWN:
+            #     if event.key == pygame.K_BACKSPACE:
+            #         user_text = user_text[:-1]
+            #     else:
+            #         user_text += event.unicode
 
         screen.fill((0, 0, 0))
         font = pygame.font.Font(None, width // 15)
