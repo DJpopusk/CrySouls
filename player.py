@@ -3,7 +3,7 @@ from mini_game import main
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos: tuple, group, player_image="main.PNG", player_speed=(30, 30)):
+    def __init__(self, pos: tuple, group, player_image="main.PNG", player_speed=(5, 5)):
         pygame.sprite.Sprite.__init__(self)
         self.image_text = player_image
         self.image = pygame.image.load(f"image\\right\\{self.image_text}").convert_alpha()
