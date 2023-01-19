@@ -1,8 +1,9 @@
 import pygame
+from mini_game import main
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos: tuple, group, player_image="main.PNG", player_speed=(5, 5)):
+    def __init__(self, pos: tuple, group, player_image="main.PNG", player_speed=(30, 30)):
         pygame.sprite.Sprite.__init__(self)
         self.image_text = player_image
         self.image = pygame.image.load(f"image\\right\\{self.image_text}").convert_alpha()
@@ -38,16 +39,17 @@ class Player(pygame.sprite.Sprite):
         self.default_image = [pygame.image.load(f"image/{i}/main.png").convert_alpha()
                               for i in ["left", "right", "up", "down"]]
 
-    def update(self, width, height, walls: list, collide: list, key_open, key_blows, size_block, level, hp):
-        self.update_region(width, height, key_open, key_blows, collide, level, hp)
+    def update(self, width, height, walls: list, collide: list, key_open, key_blows, size_block, level, hp, *screen):
+        self.update_region(width, height, key_open, key_blows, collide, level, hp, *screen)
         self._animation(key_blows)
         self.resize(width, height, size_block)
         self._update_pos(width, height, walls)
 
-    def update_region(self, width, height, key_open, key_blows, collide, level, hp):
+    def update_region(self, width, height, key_open, key_blows, collide, level, hp, *screen):
         """
         функция которая обновляет область вокруг персонажа
 
+        :param screen: экран и функция обновления экрана
         :param hp: функция которая меняет уровень hp перса
         :param width: ширена экрана
         :param height: высота экрана
@@ -62,7 +64,10 @@ class Player(pygame.sprite.Sprite):
         if key_open:
             for i in collide:
                 if i.rect.colliderect(self.region):
-                    i.open(hp, self.regeneration, level)
+                    o = i.open(hp, self.regeneration, level)
+                    if o == "mini-game":
+                        if not main(screen[0], screen[1], width, height):
+                            exit()
 
     def _update_pos(self, width, height, walls):
         """
