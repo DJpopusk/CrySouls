@@ -18,7 +18,8 @@ class Enemy(Wall):
         path = ['ZLO_0.png', 'ZLO_1.png', 'ZLO_2.png', 'ZLO_3.png']
         self.images = [pygame.image.load(f"image/ZLO/{i}").convert_alpha() for i in path]
         self.default_image = self.image
-
+        self.last_mowed = ["x", 2]
+        self.a = 0
     def update_region(self):
         """функция которая обновляет область вокруг врага"""
         if self.region.left != self.rect.centerx - 160 or self.region.top != self.rect.centery - 160:
@@ -51,48 +52,76 @@ class Enemy(Wall):
         # надо прописать логику подойти ударить отойти
 
         if self.attacking and self.region.colliderect(collider_player.rect):  # двигается на игрока
-            if collider_player.rect.centerx - 100 > self.rect.centerx:
+            if collider_player.rect.centerx - 25 > self.rect.centerx:
                 self.rect.centerx += 2
-            elif collider_player.rect.centerx + 100 < self.rect.centerx:
+                self.last_mowed = ("x", 2)
+            elif collider_player.rect.centerx + 25 < self.rect.centerx:
                 self.rect.centerx -= 2
-            if collider_player.rect.centery - 100 > self.rect.centery:
+                self.last_mowed = ("x", -2)
+            if collider_player.rect.centery - 25 > self.rect.centery:
                 self.rect.centery += 2
-            elif collider_player.rect.centery + 100 < self.rect.centery:
+                self.last_mowed = ("y", 2)
+            elif collider_player.rect.centery + 25 < self.rect.centery:
                 self.rect.centery -= 2
+                self.last_mowed = ("y", -2)
             else:
                 self.hit(hp)
                 self.attacking = False
         else:  # двигается от игрока
             pos = collider_player.get_pos()  # +_+ 38 62 160
-            a = randint(0, 4)
-            if a == 0:
-                if self.region.colliderect(collider_player.rect) and any(
-                        [any([not self.rect.colliderect(i) for i in j]) for j
-                         in walls]):
-                    self.rect.centery += 2
+            # a = randint(0, 4)
+            # if a == 0:
+            #     if self.region.colliderect(collider_player.rect) and any(
+            #             [any([not self.rect.colliderect(i) for i in j]) for j
+            #              in walls]):
+            #         self.rect.centery += 2
+            #     else:
+            #         self.attacking = True
+            # elif a == 1:
+            #     if self.region.colliderect(collider_player.rect) and any(
+            #             [any([not self.rect.colliderect(i) for i in j]) for j
+            #              in walls]):
+            #         self.rect.centerx += 2
+            #     else:
+            #         self.attacking = True
+            # elif a == 2:
+            #     if self.region.colliderect(collider_player.rect) and any(
+            #             [any([not self.rect.colliderect(i) for i in j]) for j
+            #              in walls]):
+            #         self.rect.centery -= 2
+            #     else:
+            #         self.attacking = True
+            # elif a == 3:
+            #     if self.region.colliderect(collider_player.rect) and any(
+            #             [any([not self.rect.colliderect(i) for i in j]) for j
+            #              in walls]):
+            #         self.rect.centerx -= 2
+            #     else:
+            #         self.attacking = True
+            # if self.region.colliderect(collider_player.rect) and any(
+            #         [any([not self.rect.colliderect(i) for i in j]) for j
+            #          in walls]) and self.attacking == False:
+            #         if self.last_mowed[0] == "x":
+            #             self.rect.centerx += self.last_mowed[1]
+            #         else:
+            #             self.rect.centery += self.last_mowed[1]
+            # else:
+            #     self.attacking == True
+            if self.a <= 20:
+                if self.last_mowed[0] == "x":
+                    if randint(1,2) == 1:
+                        self.rect.centerx += self.last_mowed[1]
+                    else:
+                        self.rect.centerx += self.last_mowed[1]
                 else:
-                    self.attacking = True
-            elif a == 1:
-                if self.region.colliderect(collider_player.rect) and any(
-                        [any([not self.rect.colliderect(i) for i in j]) for j
-                         in walls]):
-                    self.rect.centerx += 2
-                else:
-                    self.attacking = True
-            elif a == 2:
-                if self.region.colliderect(collider_player.rect) and any(
-                        [any([not self.rect.colliderect(i) for i in j]) for j
-                         in walls]):
-                    self.rect.centery -= 2
-                else:
-                    self.attacking = True
-            elif a == 3:
-                if self.region.colliderect(collider_player.rect) and any(
-                        [any([not self.rect.colliderect(i) for i in j]) for j
-                         in walls]):
-                    self.rect.centerx -= 2
-                else:
-                    self.attacking = True
+                    if randint(1, 2) == 1:
+                        self.rect.centery += self.last_mowed[1]
+                    else:
+                        self.rect.centery -= self.last_mowed[1]
+                self.a += 1
+            else:
+                self.attacking = True
+                self.a = 0
 
     def _update_pos(self, walls):
         for j in walls:
