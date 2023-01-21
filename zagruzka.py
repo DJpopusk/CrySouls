@@ -18,7 +18,7 @@ class ZAGRUZKA(pygame.sprite.Sprite):
         self.S = True
 
     def update(self, *args):
-        KARTINKA_surf = pygame.image.load('image/' + 'ZAGRUZKA' + '/' + '8.png')
+        KARTINKA_surf = pygame.image.load('ZAGRUZKA' + '/' + '8.png')
         KARTINKA_rect = KARTINKA_surf.get_rect(
             bottomright=(650, 650))
         sc.blit(KARTINKA_surf, KARTINKA_rect)
@@ -30,7 +30,7 @@ class ZAGRUZKA(pygame.sprite.Sprite):
                 if self.Frame > 7:
                     self.Frame -= 7
                 Personnel = ['0.png', '1.png', '2.png', '3.png', '4.png', '5.png', '6.png', '7.png']
-                self.image = pygame.image.load('image/' + 'ZAGRUZKA' + '/' + Personnel[int(self.Frame)]).convert_alpha()
+                self.image = pygame.image.load('ZAGRUZKA' + '/' + Personnel[int(self.Frame)]).convert_alpha()
         if self.DX > 150:
             self.DX += 9.5
         else:
@@ -47,7 +47,7 @@ width, height = 800, 800
 sc = pygame.display.set_mode((width, height))
 sc.fill((100, 150, 200))
 
-dog_surf = pygame.image.load('image/' + 'ZAGRUZKA' + '/' + '8.png')
+dog_surf = pygame.image.load('ZAGRUZKA' + '/' + '8.png')
 dog_rect = dog_surf.get_rect(
     bottomright=(650, 650))
 sc.blit(dog_surf, dog_rect)
