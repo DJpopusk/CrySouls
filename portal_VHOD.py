@@ -16,6 +16,7 @@ class PortalV(Wall):
 
     def open(self, *args):
         self.teleport(args[2])
+        return "mini-game"
 
     def update(self, collider_player: Player, speed: list, key: list):
         self._update(collider_player, speed, key)
