@@ -66,13 +66,14 @@ class GameWidget(QWidget):
         """
         if self.loading:
             self.tabWidget.hide()
+            self.screen.fill((0, 0, 0))
             if not self.zagruzka.update(self.screen):
                 self.loading = False
             pygame.display.update()
             self.update(0, 0, self.width(), self.height())
+            self.clock.tick(40)
             return
-        else:
-            self.tabWidget.show()
+        self.tabWidget.show()
 
         for event in pygame.event.get():
             if event.type == self.MY_EVENT:
