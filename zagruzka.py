@@ -9,7 +9,7 @@ class ZAGRUZKA(pygame.sprite.Sprite):
         self.DX = 0
         self.dx = 0
         self.dy = 0
-        self.Go = False
+        self.Go = True
         self.Frame = 0
 
     def update(self, screen):
@@ -32,6 +32,7 @@ class ZAGRUZKA(pygame.sprite.Sprite):
         self.dx += 0.13
         self.dy = 0
         pygame.draw.rect(screen, 'black', (self.DX, 100, 1000, 1000), 0)
+        screen.blit(self.image, self.rect)
         if self.DX > 800:  # когда человечек пробегает окно закрывается
             return False
         return True
@@ -56,9 +57,6 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 exit()
         player.Go = True
-        player.W = True
-        player.A = False
         if not player.update(sc): exit()
-        sc.blit(player.image, player.rect)
         pygame.display.update()
         clock.tick(50)
