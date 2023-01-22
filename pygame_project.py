@@ -1,5 +1,6 @@
 import pygame
 from player import Player
+from zagruzka import ZAGRUZKA
 from generation import Generation
 
 from PyQt5.QtWidgets import QWidget
@@ -10,15 +11,17 @@ player_group = pygame.sprite.Group()
 
 
 def func_draw_field(screen):
-    screen.fill((10, 30, 10))
+    screen.fill((10, 45, 10))
 
 
 class GameWidget(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.loading = True
         pygame.display.init()
         self.screen = pygame.display.set_mode((self.width(), self.height()), pygame.HIDDEN)
+        self.zagruzka = ZAGRUZKA(250, "image/right/main.png")
 
         self.player = Player((self.width() // 2, self.height() // 2), player_group)
 
@@ -61,6 +64,16 @@ class GameWidget(QWidget):
         """
         функция в которой происходят все действия основного цикла
         """
+        if self.loading:
+            self.tabWidget.hide()
+            if not self.zagruzka.update(self.screen):
+                self.loading = False
+            pygame.display.update()
+            self.update(0, 0, self.width(), self.height())
+            return
+        else:
+            self.tabWidget.show()
+
         for event in pygame.event.get():
             if event.type == self.MY_EVENT:
                 self.player.animation = True
@@ -119,20 +132,19 @@ class GameWidget(QWidget):
         if not self.start:
             return
 
-        match a0.text().lower():
-            case "": self.pause_on = on
-            case "w": self.Go_always[0] += 1 if on else -1
-            case "ц": self.Go_always[0] += 1 if on else -1
-            case "s": self.Go_always[1] += 1 if on else -1
-            case "ы": self.Go_always[1] += 1 if on else -1
-            case "a": self.Go_always[2] += 1 if on else -1
-            case "ф": self.Go_always[2] += 1 if on else -1
-            case "d": self.Go_always[3] += 1 if on else -1
-            case "в": self.Go_always[3] += 1 if on else -1
-            case "e": self.Open = 1 if on and not a0.isAutoRepeat() else 0
-            case "у": self.Open = 1 if on and not a0.isAutoRepeat() else 0
-            case "k": self.blows += 1 if on else -1
-            case "л": self.blows += 1 if on else -1
+        if a0.text().lower() == "": self.pause_on = on
+        if a0.text().lower() == "w": self.Go_always[0] += 1 if on else -1
+        if a0.text().lower() == "ц": self.Go_always[0] += 1 if on else -1
+        if a0.text().lower() == "s": self.Go_always[1] += 1 if on else -1
+        if a0.text().lower() == "ы": self.Go_always[1] += 1 if on else -1
+        if a0.text().lower() == "a": self.Go_always[2] += 1 if on else -1
+        if a0.text().lower() == "ф": self.Go_always[2] += 1 if on else -1
+        if a0.text().lower() == "d": self.Go_always[3] += 1 if on else -1
+        if a0.text().lower() == "в": self.Go_always[3] += 1 if on else -1
+        if a0.text().lower() == "e": self.Open = 1 if on and not a0.isAutoRepeat() else 0
+        if a0.text().lower() == "у": self.Open = 1 if on and not a0.isAutoRepeat() else 0
+        if a0.text().lower() == "k": self.blows += 1 if on else -1
+        if a0.text().lower() == "л": self.blows += 1 if on else -1
 
         if not (self.Go_always[0] or self.Go_always[1] or self.Go_always[2] or self.Go_always[3]):
             self.player.Go = False
